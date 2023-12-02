@@ -18,17 +18,7 @@ func main() {
 }
 
 func convertLine(line string) string {
-	var numbers [10]string
-	numbers[0] = "zero"
-	numbers[1] = "one"
-	numbers[2] = "two"
-	numbers[3] = "three"
-	numbers[4] = "four"
-	numbers[5] = "five"
-	numbers[6] = "six"
-	numbers[7] = "seven"
-	numbers[8] = "eight"
-	numbers[9] = "nine"
+	numbers := [10]string{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"}
 
 	for index, number := range numbers {
 		line = strings.ReplaceAll(line, number, string(number[0])+strconv.Itoa(index)+string(number[len(number)-1]))
@@ -55,15 +45,12 @@ func processLine(line string) int {
 
 func handleFile(path string) (int, error) {
 	if file, err := os.Open(path); err == nil {
-		defer func(file *os.File) {
-			_ = file.Close()
-		}(file)
+		defer file.Close()
 
 		scanner := bufio.NewScanner(file)
-		result := 0
 
+		var result int
 		for scanner.Scan() {
-			fmt.Println(convertLine(scanner.Text()))
 			result += processLine(convertLine(scanner.Text()))
 		}
 
